@@ -69,6 +69,40 @@ class _MapScreenState extends State<MapScreen> {
     getMyCurrentLocation();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          position != null
+              ? buildMap()
+              : Center(
+            child: Container(
+              child: const CircularProgressIndicator(
+                color: MyColors.blue,
+              ),
+            ),
+          ),
+          buildFloatingSearchBar(),
+          isSearchedPlaceMarkerClicked
+              ? DistanceAndTime(
+            isTimeAndDistanceVisible: isTimeAndDistanceVisible,
+            placeDirections: placeDirections,
+          )
+              : Container(),
+        ],
+      ),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.fromLTRB(0, 0, 8, 30),
+        child: FloatingActionButton(
+          backgroundColor: MyColors.blue,
+          onPressed: _goToMyCurrentLocation,
+          child: const Icon(Icons.place, color: Colors.white),
+        ),
+      ),
+    );
+  }
   Future<void> getMyCurrentLocation() async {
     position = await LocationHelper.getCurrentLocation().whenComplete(() {
       setState(() {});
@@ -305,38 +339,4 @@ class _MapScreenState extends State<MapScreen> {
         .emitPlaceLocation(placeSuggestion.placeId, sessionToken);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          position != null
-              ? buildMap()
-              : Center(
-            child: Container(
-              child: const CircularProgressIndicator(
-                color: MyColors.blue,
-              ),
-            ),
-          ),
-          buildFloatingSearchBar(),
-          isSearchedPlaceMarkerClicked
-              ? DistanceAndTime(
-            isTimeAndDistanceVisible: isTimeAndDistanceVisible,
-            placeDirections: placeDirections,
-          )
-              : Container(),
-        ],
-      ),
-      floatingActionButton: Container(
-        margin: const EdgeInsets.fromLTRB(0, 0, 8, 30),
-        child: FloatingActionButton(
-          backgroundColor: MyColors.blue,
-          onPressed: _goToMyCurrentLocation,
-          child: const Icon(Icons.place, color: Colors.white),
-        ),
-      ),
-    );
-  }
 }
