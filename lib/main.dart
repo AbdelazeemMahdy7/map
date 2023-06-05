@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:maps/app_router.dart';
 import 'constants/strings.dart';
 
-
 late String initialRoute;
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
   FirebaseAuth.instance.authStateChanges().listen((user) {
     if (user == null) {
@@ -16,7 +16,6 @@ void main() async{
     } else {
       initialRoute = mapScreen;
     }
-
   });
   runApp(
     MyApp(
@@ -28,10 +27,7 @@ void main() async{
 class MyApp extends StatelessWidget {
   final AppRouter appRouter;
 
-  const MyApp({
-    Key? key,
-    required this.appRouter
-  }) : super(key: key);
+  const MyApp({Key? key, required this.appRouter}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -42,9 +38,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      onGenerateRoute:appRouter.generateRoute,
+      onGenerateRoute: appRouter.generateRoute,
       initialRoute: initialRoute,
     );
   }
 }
-
